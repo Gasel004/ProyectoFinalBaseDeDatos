@@ -4,9 +4,9 @@ Aplicación académica para administrar clientes, vehículos y órdenes de un ta
 
 ## Contenido
 
-- `docs/Documento_Analisis.md`: análisis del problema, alcance, reglas y decisiones de diseño.
-- `outputs/01a1b26e-8a9d-7720-981f-eef222032cd7/Normalizacion_Proyecto_Final.xlsx`: normalización explicada en una sola hoja.
-- `outputs/01a1b26e-8a9d-7720-981f-eef222032cd7/Diagrama_ER_Taller.png` y `.svg`: diagrama entidad-relación en pata de gallo.
+- `documentacións/Documento_Analisis.pdf`: análisis del problema, alcance, reglas y decisiones de diseño.
+- `documentación/Normalizacion_Proyecto_Final.xlsx`: normalización explicada.
+- `documentación//Diagrama_ER_Taller.png` y `.svg`: diagrama entidad-relación en pata de gallo.
 - `sql/01_crear_bd_y_tablas.sql`: base de datos, tablas, restricciones e índices.
 - `sql/02_insertar_datos.sql`: datos ficticios de demostración.
 - `sql/03_consultas.sql`: siete consultas solicitadas.
