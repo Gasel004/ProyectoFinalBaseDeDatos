@@ -11,7 +11,6 @@ Aplicación académica para administrar clientes, vehículos y órdenes de un ta
 - `sql/02_insertar_datos.sql`: datos ficticios de demostración.
 - `sql/03_consultas.sql`: siete consultas solicitadas.
 - `app/`: aplicación web y sus plantillas.
-- `docs/Guion_video_evidencias.md`: secuencia sugerida para grabar la demostración.
 
 ## 1. Crear la base de datos
 
@@ -83,6 +82,4 @@ Abre `http://127.0.0.1:5000` en el navegador. La aplicación escucha solo en la 
 | No aparece un mecánico, servicio o repuesto en el formulario | El registro está inactivo o no se insertaron los datos iniciales. | Revisa la columna `activo` y ejecuta el script de datos. |
 | No se registra una orden por inventario | La cantidad solicitada supera la existencia actual. | Ajusta la cantidad o actualiza el inventario desde MySQL Workbench. |
 
-## Alcance de la demostración
 
-El sistema está preparado para una demostración local académica. No incluye cuentas de usuario, publicación en internet, facturación fiscal ni registro de movimientos de inventario anteriores al uso de la aplicación. Las credenciales de MySQL y la grabación final deben configurarse en el equipo del estudiante.
