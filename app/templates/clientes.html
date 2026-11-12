@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% block title %}Clientes y vehículos · Taller{% endblock %}
+{% block content %}
+  <section class="page-heading"><p class="eyebrow">Registro</p><h1>Clientes y vehículos</h1><p>Registra clientes y agrega sus vehículos para usarlos en órdenes futuras</p></section>
+  <div class="two-column">
+    <section class="panel">
+      <h2>Registrar cliente</h2>
+      <form method="post" class="form-grid">
+        <input type="hidden" name="action" value="nuevo_cliente">
+        <label>Nombres<input name="nombres" required maxlength="80"></label>
+        <label>Apellidos<input name="apellidos" required maxlength="80"></label>
+        <label>Teléfono<input name="telefono" maxlength="25"></label>
+        <label>Correo<input name="correo" type="email" maxlength="120"></label>
+        <div class="form-subhead"><h3>Vehículo inicial (opcional)</h3><p>Completa placa, marca y modelo para registrarlo junto con el cliente</p></div>
+        <label>Placa<input name="placa" maxlength="15" autocomplete="off"></label>
+        <label>Marca<input name="marca" maxlength="50"></label>
+        <label>Modelo<input name="modelo" maxlength="50"></label>
+        <label>Año<input name="anio" type="number" min="1886" max="2100"></label>
+        <label>Color<input name="color" maxlength="30"></label>
+        <div class="form-actions"><button type="submit">Guardar cliente</button></div>
+      </form>
+    </section>
+    <section class="panel">
+      <h2>Agregar vehículo a cliente existente</h2>
+      {% if client_options %}
+        <form method="post" class="form-grid">
+          <input type="hidden" name="action" value="nuevo_vehiculo">
+          <label class="full">Propietario<select name="id_cliente" required><option value="">Selecciona un cliente</option>{% for client in client_options %}<option value="{{ client.id_cliente }}">{{ client.apellidos }}, {{ client.nombres }}</option>{% endfor %}</select></label>
+          <label>Placa<input name="placa" required maxlength="15"></label>
+          <label>Marca<input name="marca" required maxlength="50"></label>
+          <label>Modelo<input name="modelo" required maxlength="50"></label>
+          <label>Año<input name="anio" type="number" min="1886" max="2100"></label>
+          <label>Color<input name="color" maxlength="30"></label>
+          <div class="form-actions"><button type="submit">Guardar vehículo</button></div>
+        </form>
+      {% else %}<p class="empty">Registra un cliente antes de agregar vehículos.</p>{% endif %}
+    </section>
+  </div>
+  <section class="panel">
+    <h2>Clientes registrados</h2>
+    {% if clients %}<div class="table-wrap"><table>
+      <thead><tr><th>Cliente</th><th>Teléfono</th><th>Correo</th><th>Vehículos</th></tr></thead>
+      <tbody>{% for client in clients %}<tr><td>{{ client.apellidos }}, {{ client.nombres }}</td><td>{{ client.telefono or '—' }}</td><td>{{ client.correo or '—' }}</td><td>{{ client.cantidad_vehiculos }}</td></tr>{% endfor %}</tbody>
+    </table></div>{% else %}<p class="empty">No hay clientes registrados</p>{% endif %}
+  </section>
+{% endblock %}

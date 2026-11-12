@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block title %}Consultas SQL · Taller{% endblock %}
+{% block content %}
+  <section class="page-heading"><p class="eyebrow">Reportes del taller</p><h1>Consultas</h1><p>Ejecuta las siete consultas incluidas en el proyecto</p></section>
+  <section class="panel">
+    <form method="get" class="query-picker">
+      <label>Consulta<select name="consulta" onchange="this.form.submit()">{% for id, name in reports.items() %}<option value="{{ id }}" {% if id == selected %}selected{% endif %}>{{ id }}. {{ name }}</option>{% endfor %}</select></label>
+      <noscript><button type="submit">Ejecutar</button></noscript>
+    </form>
+    <h2>{{ title }}</h2>
+    {% if error %}<p class="flash error">No se pudo ejecutar la consulta: {{ error }}</p>
+    {% elif rows %}<div class="table-wrap"><table>
+      <thead><tr>{% for column in columns %}<th>{{ column|replace('_',' ')|capitalize }}</th>{% endfor %}</tr></thead>
+      <tbody>{% for row in rows %}<tr>{% for column in columns %}<td>{{ row[column] if row[column] is not none else '—' }}</td>{% endfor %}</tr>{% endfor %}</tbody>
+    </table></div>
+    {% else %}<p class="empty">La consulta no devolvió filas con los datos actuales</p>{% endif %}
+  </section>
+{% endblock %}

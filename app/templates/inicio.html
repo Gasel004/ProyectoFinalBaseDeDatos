@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Inicio · Taller{% endblock %}
+{% block content %}
+  <section class="page-heading">
+    <p class="eyebrow">Panel del taller</p>
+    <h1>Órdenes de reparación</h1>
+    <p></p>
+  </section>
+  <section class="metric-grid" aria-label="Resumen">
+    <article class="metric"><span>Clientes</span><strong>{{ metrics.clientes }}</strong></article>
+    <article class="metric"><span>Vehículos</span><strong>{{ metrics.vehiculos }}</strong></article>
+    <article class="metric"><span>Órdenes</span><strong>{{ metrics.ordenes }}</strong></article>
+    <article class="metric"><span>Abiertas o en proceso</span><strong>{{ metrics.pendientes }}</strong></article>
+  </section>
+  <section class="panel">
+    <div class="section-heading">
+      <div><h2>Órdenes recientes</h2><p>Las últimas órdenes registgradas en el sistema</p></div>
+      <a class="button" href="{{ url_for('nueva_orden') }}">Registrar orden</a>
+    </div>
+    {% if recent %}
+      <div class="table-wrap"><table>
+        <thead><tr><th>Orden</th><th>Recepción</th><th>Cliente</th><th>Placa</th><th>Estado</th></tr></thead>
+        <tbody>{% for order in recent %}
+          <tr><td>O{{ '%04d'|format(order.id_orden) }}</td><td>{{ order.fecha_recepcion }}</td><td>{{ order.cliente }}</td><td>{{ order.placa }}</td><td><span class="status">{{ order.estado|replace('_',' ') }}</span></td></tr>
+        {% endfor %}</tbody>
+      </table></div>
+    {% else %}<p class="empty">Aún no hay órdenes. Registra una para comenzar.</p>{% endif %}
+  </section>
+{% endblock %}

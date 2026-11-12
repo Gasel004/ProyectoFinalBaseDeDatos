@@ -1,0 +1,5 @@
+{% extends 'base.html' %}
+{% block title %}Conexión a MySQL · Taller{% endblock %}
+{% block content %}
+  <section class="panel error-panel"><p class="eyebrow">Conexión pendiente</p><h1>No se pudo acceder a MySQL</h1><p>Revisa que el servidor esté iniciado, ejecuta los scripts SQL y completa las credenciales locales en <code>app/.env</code>.</p><pre>{{ message }}</pre><a class="button" href="{{ url_for('inicio') }}">Volver a intentar</a></section>
+{% endblock %}

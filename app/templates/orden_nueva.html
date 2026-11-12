@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Nueva orden · Taller{% endblock %}
+{% block content %}
+  <section class="page-heading"><p class="eyebrow">Registro de trabajo</p><h1>Nueva orden de reparación</h1><p>Una orden puede incluir varios servicios, repuestos y mecánicos participantes</p></section>
+  <form method="post" class="panel order-form">
+    <section class="form-section">
+      <h2>Datos de la orden</h2>
+      <div class="form-grid">
+        <label class="full">Vehículo<select name="id_vehiculo" required><option value="">Selecciona vehículo</option>{% for vehicle in vehicles %}<option value="{{ vehicle.id_vehiculo }}">{{ vehicle.placa }} · {{ vehicle.marca }} {{ vehicle.modelo }} · {{ vehicle.nombres }} {{ vehicle.apellidos }}</option>{% endfor %}</select></label>
+        <label>Mecánico responsable<select name="id_responsable" required><option value="">Selecciona responsable</option>{% for mechanic in mechanics %}<option value="{{ mechanic.id_mecanico }}">{{ mechanic.apellidos }}, {{ mechanic.nombres }}</option>{% endfor %}</select></label>
+        <label>Estado<select name="estado" required>{% for state in states %}<option value="{{ state }}">{{ state|replace('_',' ') }}</option>{% endfor %}</select></label>
+        <label>Fecha de recepción<input name="fecha_recepcion" type="datetime-local" required></label>
+        <label>Fecha de entrega (si ya se entregó)<input name="fecha_entrega" type="datetime-local"></label>
+        <label class="full">Problema reportado<textarea name="problema_reportado" required rows="3" maxlength="2000"></textarea></label>
+      </div>
+    </section>
+    <section class="form-section">
+      <div class="section-heading"><div><h2>Servicios</h2><p>El precio vigente se copia a la orden como precio histórico</p></div><button type="button" class="button secondary" onclick="addRow('service-rows','service-template')">Agregar servicio</button></div>
+      <div id="service-rows" class="line-list">
+        <div class="line-row"><label>Servicio<select name="service_id[]"><option value="">Selecciona servicio</option>{% for service in services %}<option value="{{ service.id_servicio }}">{{ service.nombre }} · Q{{ '%.2f'|format(service.precio_referencia) }}</option>{% endfor %}</select></label><label>Cantidad<input name="service_quantity[]" type="number" min="0.01" step="0.01" value="1"></label><label class="wide">Observaciones<input name="service_note[]" maxlength="255"></label><button type="button" class="remove-row" aria-label="Quitar servicio" onclick="removeRow(this)">×</button></div>
+      </div>
+    </section>
+    <section class="form-section">
+      <div class="section-heading"><div><h2>Repuestos</h2><p>El sistema valida existencia y descuenta unidades al guardar</p></div><button type="button" class="button secondary" onclick="addRow('part-rows','part-template')">Agregar repuesto</button></div>
+      <div id="part-rows" class="line-list">
+        <div class="line-row"><label>Repuesto<select name="part_id[]"><option value="">Selecciona repuesto</option>{% for part in parts %}<option value="{{ part.id_repuesto }}">{{ part.nombre }} · Q{{ '%.2f'|format(part.precio_actual) }} · existencia {{ part.existencia }}</option>{% endfor %}</select></label><label>Cantidad<input name="part_quantity[]" type="number" min="1" step="1" value="1"></label><button type="button" class="remove-row" aria-label="Quitar repuesto" onclick="removeRow(this)">×</button></div>
+      </div>
+    </section>
+    <section class="form-section">
+      <div class="section-heading"><div><h2>Mecánicos participantes</h2><p>Opcional. El responsable puede agregarse también como participante</p></div><button type="button" class="button secondary" onclick="addRow('mechanic-rows','mechanic-template')">Agregar mecánico</button></div>
+      <div id="mechanic-rows" class="line-list">
+        <div class="line-row"><label>Mecánico<select name="participant_id[]"><option value="">Selecciona mecánico</option>{% for mechanic in mechanics %}<option value="{{ mechanic.id_mecanico }}">{{ mechanic.apellidos }}, {{ mechanic.nombres }}</option>{% endfor %}</select></label><label class="wide">Trabajo realizado<input name="participant_job[]" maxlength="255"></label><label>Horas<input name="participant_hours[]" type="number" min="0" step="0.25" value="0"></label><button type="button" class="remove-row" aria-label="Quitar mecánico" onclick="removeRow(this)">×</button></div>
+      </div>
+    </section>
+    <div class="form-actions"><button type="submit">Guardar orden</button><a class="text-link" href="{{ url_for('inicio') }}">Cancelar</a></div>
+  </form>
+  <template id="service-template"><div class="line-row"><label>Servicio<select name="service_id[]"><option value="">Selecciona servicio</option>{% for service in services %}<option value="{{ service.id_servicio }}">{{ service.nombre }} · Q{{ '%.2f'|format(service.precio_referencia) }}</option>{% endfor %}</select></label><label>Cantidad<input name="service_quantity[]" type="number" min="0.01" step="0.01" value="1"></label><label class="wide">Observaciones<input name="service_note[]" maxlength="255"></label><button type="button" class="remove-row" aria-label="Quitar servicio" onclick="removeRow(this)">×</button></div></template>
+  <template id="part-template"><div class="line-row"><label>Repuesto<select name="part_id[]"><option value="">Selecciona repuesto</option>{% for part in parts %}<option value="{{ part.id_repuesto }}">{{ part.nombre }} · Q{{ '%.2f'|format(part.precio_actual) }} · existencia {{ part.existencia }}</option>{% endfor %}</select></label><label>Cantidad<input name="part_quantity[]" type="number" min="1" step="1" value="1"></label><button type="button" class="remove-row" aria-label="Quitar repuesto" onclick="removeRow(this)">×</button></div></template>
+  <template id="mechanic-template"><div class="line-row"><label>Mecánico<select name="participant_id[]"><option value="">Selecciona mecánico</option>{% for mechanic in mechanics %}<option value="{{ mechanic.id_mecanico }}">{{ mechanic.apellidos }}, {{ mechanic.nombres }}</option>{% endfor %}</select></label><label class="wide">Trabajo realizado<input name="participant_job[]" maxlength="255"></label><label>Horas<input name="participant_hours[]" type="number" min="0" step="0.25" value="0"></label><button type="button" class="remove-row" aria-label="Quitar mecánico" onclick="removeRow(this)">×</button></div></template>
+{% endblock %}
+{% block scripts %}<script>
+function addRow(containerId, templateId) {
+  document.getElementById(containerId).appendChild(document.getElementById(templateId).content.cloneNode(true));
+}
+function removeRow(button) {
+  const rows = button.closest('.line-list');
+  if (rows.children.length > 1) button.closest('.line-row').remove();
+  else button.closest('.line-row').querySelectorAll('select,input').forEach(field => { field.value = ''; });
+}
+</script>{% endblock %}
