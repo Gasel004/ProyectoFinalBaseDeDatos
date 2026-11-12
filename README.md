@@ -1,5 +1,5 @@
 # Sistema de gestión de órdenes de reparación
-
+# Documenta generado con IA(.md)
 Aplicación académica para administrar clientes, vehículos y órdenes de un taller automotriz. Usa MySQL 8.0.16 o superior y Python 3.10 o superior con Flask.
 
 ## Contenido
